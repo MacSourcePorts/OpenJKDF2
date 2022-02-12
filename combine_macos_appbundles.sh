@@ -19,6 +19,8 @@ lipo -create -output OpenJKDF2_universal.app/Contents/MacOS/libvorbisfile.3.dyli
 lipo -create -output OpenJKDF2_universal.app/Contents/MacOS/libFLAC.8.dylib OpenJKDF2.app/Contents/MacOS/libFLAC.8.dylib OpenJKDF2_x86_64.app/Contents/MacOS/libFLAC.8.dylib
 lipo -create -output OpenJKDF2_universal.app/Contents/MacOS/libogg.0.dylib OpenJKDF2.app/Contents/MacOS/libogg.0.dylib OpenJKDF2_x86_64.app/Contents/MacOS/libogg.0.dylib
 
+install_name_tool -change /usr/local/opt/libogg/lib/libogg.0.dylib @executable_path/libogg.0.dylib OpenJKDF2_universal.app/Contents/MacOS/libFLAC.8.dylib
+install_name_tool -change /opt/homebrew/opt/libogg/lib/libogg.0.dylib @executable_path/libogg.0.dylib OpenJKDF2_universal.app/Contents/MacOS/libFLAC.8.dylib
 
 chmod 774 OpenJKDF2_universal.app/Contents/MacOS/openjkdf2-64
 chmod 774 OpenJKDF2_universal.app/Contents/MacOS/*.dylib

@@ -75,3 +75,4 @@ win64-debug
 win64-package
 asan.log.*
 build_hooks/
+release/

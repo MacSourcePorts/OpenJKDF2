@@ -11,15 +11,17 @@ rm -rf build_darwin64
 rm -f src/globals.h
 rm -f src/globals.c
 
+#
+
 mkdir -p build_darwin_x86_64 && cd build_darwin_x86_64 &&
-cmake .. -DPLAT_MACOS_X86_64=true &&
-cmake .. -DPLAT_MACOS_X86_64=true &&
+cmake .. -DPLAT_MACOS_X86_64=true -DCMAKE_C_FLAGS="-mmacosx-version-min=10.9" -DCMAKE_EXE_LINKER_FLAGS="-mmacosx-version-min=10.9" &&
+cmake .. -DPLAT_MACOS_X86_64=true -DCMAKE_C_FLAGS="-mmacosx-version-min=10.9" -DCMAKE_EXE_LINKER_FLAGS="-mmacosx-version-min=10.9" &&
 make -j10 &&
 cd .. &&
 
 
 mkdir -p build_darwin64 && cd build_darwin64 &&
-cmake .. &&
+cmake ..  -DCMAKE_C_FLAGS="-mmacosx-version-min=10.9" -DCMAKE_EXE_LINKER_FLAGS="-mmacosx-version-min=10.9" &&
 make -j10 &&
 cd .. &&
 
@@ -35,4 +37,4 @@ rm -rf build_darwin64
 rm -rf OpenJKDF2.app
 rm -rf OpenJKDF2_x86_64.app
 rm -rf OpenJKDF2_arm64.app
-rm -rf OpenJKDF2_universal.app
+# rm -rf OpenJKDF2_universal.app

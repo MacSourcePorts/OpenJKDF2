@@ -9,13 +9,13 @@
 	<key>CFBundleIconFile</key>
 	<string>OpenJKDF2.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.openjkdf2.openjkdf2</string>
+	<string>com.macsourceports.openjkdf2</string>
 	<key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>12.0.0</string>
+	<string>10.0.0</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>CSResourcesFileMapped</key>
