@@ -67,11 +67,6 @@ OpenJKDF2 requires game data from a licensed copy of Jedi Knight: Dark Forces II
     ├── Res1hi.gob
     ├── Res2.gob
     ├── jk_.cd
-    ├── shaders
-    │   ├── default_f.glsl
-    │   ├── default_v.glsl
-    │   ├── menu_f.glsl
-    │   └── menu_v.glsl
     └── video
         ├── 01-02A.SMK
         ├── 03-04A.SMK
@@ -190,6 +185,7 @@ DebugConsole                   0x5de      0.139%        100.000%       13 / 13
 sithUnk4                       0x5e9      0.140%        100.000%        6 / 6          
 sithExplosion                  0x61d      0.145%        100.000%        4 / 4          
 sithAIClass                    0x689      0.155%        100.000%        7 / 7          
+rdPrimit2                      0x69a      0.157%        100.000%        5 / 5          
 Window                         0x6db      0.163%        100.000%       13 / 13         
 stdGob                         0x6dd      0.163%        100.000%       14 / 14         
 jkAI                           0x6e7      0.164%        100.000%        5 / 5          
@@ -231,6 +227,7 @@ stdControl                     0x11ec     0.425%        100.000%       22 / 22
 sithCogYACC                    0x152b     0.502%        100.000%       10 / 10         
 jkRes                          0x15b6     0.515%        100.000%       23 / 23         
 sithWorld                      0x1718     0.548%        100.000%       22 / 22         
+sithDSS                        0x175d     0.554%        100.000%       22 / 22         
 stdMath                        0x182a     0.573%        100.000%       23 / 23         
 rdActive                       0x1a55     0.625%        100.000%        8 / 8          
 sithCogParse                   0x1b2a     0.645%        100.000%       26 / 26         
@@ -255,7 +252,6 @@ sithAIAwareness                0x31f      0.074%        90.488%         5 / 6
 sithDplay                      0x53c      0.124%        2.090%          1 / 17         
 Video                          0x5dc      0.139%        19.800%         3 / 5          
 stdFileUtil                    0x687      0.155%        54.159%         6 / 11         
-rdPrimit2                      0x69a      0.157%        53.787%         2 / 5          
 stdBmp                         0x6b8      0.159%        0.000%          0 / 3          
 sithCogScript                  0x6ca      0.161%        89.241%         8 / 9          
 sithAnimClass                  0x6cc      0.161%        94.080%         4 / 5          
@@ -289,14 +285,13 @@ jkGuiDisplay                   0x12ff     0.451%        0.000%          0 / 11
 jkGuiJoystick                  0x13f0     0.473%        0.000%          0 / 19         
 jkMain                         0x16cd     0.541%        86.294%        40 / 53         
 rdPrimit3                      0x16e0     0.543%        91.684%         7 / 9          
-sithDSS                        0x175d     0.554%        96.673%        20 / 22         
 stdFont                        0x181a     0.572%        75.284%        12 / 20         
 sithSurface                    0x1c6a     0.674%        95.298%        31 / 35         
 jkHud                          0x1c9b     0.679%        97.952%        16 / 17         
 sithCog                        0x1ed3     0.731%        90.686%        21 / 28         
 jkSaber                        0x1f4a     0.742%        75.980%        23 / 40         
 jkDev                          0x1fd6     0.755%        94.687%        39 / 41         
-sithDSSThing                   0x22aa     0.823%        39.542%         7 / 37         
+sithDSSThing                   0x22aa     0.823%        50.980%        10 / 37         
 sithMulti                      0x252a     0.882%        0.105%          1 / 35         
 jkGuiBuildMulti                0x258b     0.891%        0.000%          0 / 24         
 stdDisplay                     0x267b     0.913%        61.537%        22 / 37         
@@ -311,36 +306,36 @@ rdNRaster                      0x304d4    18.339%       0.000%          0 / 87
 
 Total completion:
 -----------------
-50.206% by weight
-84.792% by weight excluding rasterizer
-2386 / 3169 functions
-2386 / 2798 functions excluding rasterizer
+50.391% by weight
+85.104% by weight excluding rasterizer
+2394 / 3169 functions
+2394 / 2798 functions excluding rasterizer
 
 Subsystem Breakdown (Not Decomp'd)
 ----------------------------------
 [subsys]       [% of text]  [TODO / total]
-sith           2.486%          151 / 1323
+sith           2.373%          146 / 1323
 stdPlatform    0.238%           24 / 43
 std            1.844%           61 / 359
 jkGui          2.691%           83 / 284
-rd             0.288%           14 / 345
+rd             0.216%           11 / 345
 jk             0.552%           42 / 324
 Raster         40.778%         370 / 371
 other          0.916%           38 / 120
 -----------------------------------------
-total          49.794%         783 / 3169
+total          49.609%         775 / 3169
 
 Subsystem Breakdown (Not Decomp'd, Excl Raster)
 -----------------------------------------------
 [subsys]       [% of text]  [TODO / total]
-sith           4.198%          151 / 1323
+sith           4.008%          146 / 1323
 stdPlatform    0.402%           24 / 43
 std            3.115%           61 / 359
 jkGui          4.545%           83 / 284
-rd             0.487%           14 / 345
+rd             0.364%           11 / 345
 jk             0.933%           42 / 324
 other          1.548%           38 / 120
 -----------------------------------------
-total          15.227%         413 / 2798
+total          14.915%         405 / 2798
 
 ```

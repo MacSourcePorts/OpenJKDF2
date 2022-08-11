@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+export PATH="${HOMEBREW_PREFIX}/opt/llvm/bin:$PATH"
+
 rm -rf OpenJKDF2.app
 rm -rf OpenJKDF2_x86_64.app
 rm -rf OpenJKDF2_arm64.app
@@ -7,6 +9,8 @@ rm -rf OpenJKDF2_universal.app
 
 rm -rf build_darwin_x86_64
 rm -rf build_darwin64
+
+rm -f macos-debug.tar.gz
 
 rm -f src/globals.h
 rm -f src/globals.c

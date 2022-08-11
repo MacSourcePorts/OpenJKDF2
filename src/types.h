@@ -668,18 +668,6 @@ typedef struct rdProcEntry
     uint32_t vertexColorMode;
 } rdProcEntry;
 
-typedef struct rdMeshinfo
-{
-    uint32_t numVertices;
-    int* vertexPosIdx;
-    int* vertexUVIdx;
-    rdVector3* verticesProjected;
-    rdVector2* vertexUVs;
-    float* vertex_lights_maybe_;
-    uint32_t field_18;
-    rdVector3* verticesOrig;
-} rdMeshinfo;
-
 typedef struct v11_struct
 {
   int mipmap_related;
@@ -706,7 +694,68 @@ typedef struct rdLine
 typedef float D3DVALUE;
 
 #pragma pack(push, 4)
-typedef struct D3DVERTEX
+typedef struct D3DVERTEX_orig
+{
+  union ALIGNED_(4)
+  {
+    D3DVALUE x;
+    float dvX;
+  };
+  #pragma pack(push, 4)
+  union
+  {
+    D3DVALUE y;
+    D3DVALUE dvY;
+  };
+  #pragma pack(pop)
+  #pragma pack(push, 4)
+  union
+  {
+    D3DVALUE z;
+    D3DVALUE dvZ;
+  };
+  #pragma pack(pop)
+  #pragma pack(push, 4)
+  union
+  {
+    D3DVALUE nx;
+    D3DVALUE dvNX;
+  };
+  #pragma pack(pop)
+  #pragma pack(push, 4)
+  union
+  {
+    D3DVALUE ny;
+    D3DVALUE dvNY;
+    uint32_t color;
+  };
+  #pragma pack(pop)
+  #pragma pack(push, 4)
+  union
+  {
+    D3DVALUE nz;
+    D3DVALUE dvNZ;
+  };
+  #pragma pack(pop)
+  #pragma pack(push, 4)
+  union
+  {
+    D3DVALUE tu;
+    D3DVALUE dvTU;
+  };
+  #pragma pack(pop)
+  #pragma pack(push, 4)
+  union
+  {
+    D3DVALUE tv;
+    D3DVALUE dvTV;
+  };
+  #pragma pack(pop)
+} D3DVERTEX_orig;
+#pragma pack(pop)
+
+#pragma pack(push, 4)
+typedef struct D3DVERTEX_ext
 {
   union ALIGNED_(4)
   {
@@ -762,8 +811,21 @@ typedef struct D3DVERTEX
     D3DVALUE dvTV;
   };
   #pragma pack(pop)
-} D3DVERTEX;
+  #pragma pack(push, 4)
+  uint32_t color;
+  #pragma pack(pop)
+  #pragma pack(push, 4)
+  float lightLevel;
+  #pragma pack(pop)
+} D3DVERTEX_ext;
 #pragma pack(pop)
+
+// TODO: Differentiate by renderer, not SDL2
+#ifdef SDL2_RENDER
+typedef D3DVERTEX_ext D3DVERTEX;
+#else
+typedef D3DVERTEX_orig D3DVERTEX;
+#endif
 
 /* 174 */
 typedef DWORD D3DCOLORMODEL;
@@ -877,6 +939,16 @@ typedef struct rdDDrawSurface
     uint32_t gpu_accel_maybe;
     rdDDrawSurface* tex_prev;
     rdDDrawSurface* tex_next;
+#ifdef SDL2_RENDER
+    uint32_t emissive_texture_id;
+    uint32_t displacement_texture_id;
+    float emissive_factor[3];
+    float displacement_factor;
+    void* emissive_data;
+    void* albedo_data;
+    void* displacement_data;
+    int skip_jkgm;
+#endif
 } rdDDrawSurface;
 
 typedef struct rdTexformat
@@ -1036,6 +1108,9 @@ typedef struct rdMaterial
 {
     uint32_t tex_type;
     char mat_fpath[32];
+#ifdef SDL2_RENDER
+    char mat_full_fpath[256];
+#endif
     uint32_t id;
     rdTexformat tex_format;
     rdColor24 *palette_alloc;
@@ -1184,10 +1259,22 @@ typedef struct rdVertexIdxInfo
     int* vertexPosIdx;
     int* vertexUVIdx;
     rdVector3* vertices;
-    rdVector2* extraUV;
-    float* field_14;
+    rdVector2* vertexUVs;
+    float* paDynamicLight;
     float* intensities;
 } rdVertexIdxInfo;
+
+typedef struct rdMeshinfo
+{
+    uint32_t numVertices;
+    int* vertexPosIdx;
+    int* vertexUVIdx;
+    rdVector3* verticesProjected;
+    rdVector2* vertexUVs;
+    float* paDynamicLight;
+    float* intensities;
+    rdVector3* verticesOrig;
+} rdMeshinfo;
 
 typedef struct rdFace
 {
@@ -2332,7 +2419,7 @@ typedef struct sithThing
     sithThing* parentThing;
     uint32_t signature;
     sithThing* templateBase;
-    sithThing* template;
+    sithThing* pTemplate;
     sithThing* prev_thing;
     uint32_t child_signature;
     rdMatrix34 lookOrientation;

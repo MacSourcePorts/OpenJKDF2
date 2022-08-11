@@ -1044,8 +1044,11 @@ void do_hooks()
     hook_function(rdMath_PointsCollinear_ADDR, rdMath_PointsCollinear);
     
     // rdPrimit2
-    hook_function(rdPrimit2_DrawCircle_ADDR, rdPrimit2_DrawCircle);
+    hook_function(rdPrimit2_DrawLine_ADDR, rdPrimit2_DrawLine);
     hook_function(rdPrimit2_DrawClippedLine_ADDR, rdPrimit2_DrawClippedLine);
+    hook_function(rdPrimit2_DrawCircle_ADDR, rdPrimit2_DrawCircle);
+    hook_function(rdPrimit2_DrawRectangle_ADDR, rdPrimit2_DrawRectangle);
+    hook_function(rdPrimit2_DrawTriangle_ADDR, rdPrimit2_DrawTriangle);
 
     // rdPrimit3
     //hook_function(rdPrimit3_ClipFace_ADDR, rdPrimit3_ClipFace);
@@ -1315,6 +1318,10 @@ void do_hooks()
     hook_function(sithAIAwareness_AddEntry_ADDR, sithAIAwareness_AddEntry);
     hook_function(sithPhysics_ThingGetInsertOffsetZ_ADDR, sithPhysics_ThingGetInsertOffsetZ);
     hook_function(sithSector_GetPtrFromIdx_ADDR, sithSector_GetPtrFromIdx);
+
+    // sithDSSThing
+    hook_function(sithDSSThing_SendTeleportThing_ADDR, sithDSSThing_SendTeleportThing);
+    hook_function(sithDSSThing_HandleTeleportThing_ADDR, sithDSSThing_HandleTeleportThing);
 
 #if 0
     hook_function(sithDSSThing_SendSyncThingFull_ADDR, sithDSSThing_SendSyncThingFull);
@@ -1785,7 +1792,7 @@ void do_hooks()
     hook_function(sithRender_UpdateLights_ADDR, sithRender_UpdateLights);
     hook_function(sithRender_RenderDynamicLights_ADDR, sithRender_RenderDynamicLights);
     hook_function(sithRender_RenderThings_ADDR, sithRender_RenderThings);
-    hook_function(sithRender_RenderPov_ADDR, sithRender_RenderPov);
+    hook_function(sithRender_RenderThing_ADDR, sithRender_RenderThing);
     hook_function(sithRender_RenderAlphaSurfaces_ADDR, sithRender_RenderAlphaSurfaces);
     hook_function(sithRender_SetRenderWeaponHandle_ADDR, sithRender_SetRenderWeaponHandle);
     

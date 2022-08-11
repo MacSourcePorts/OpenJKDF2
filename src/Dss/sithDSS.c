@@ -155,7 +155,51 @@ LABEL_11:
     return 1;
 }
 
-// SectorAlt
+void sithDSS_SendSyncSectorAlt(sithSector *pSector, int sendto_id, int mpFlags)
+{
+    NETMSG_START;
+
+    NETMSG_PUSHS16(pSector->id);
+    NETMSG_PUSHU32(pSector->flags);
+    NETMSG_END(COGMSG_SYNCSECTORALT);
+
+    if (!(pSector->flags & SITH_SECTOR_80))
+        sithCogVm_SendMsgToPlayer(&sithCogVm_netMsgTmp, sendto_id, mpFlags, 1);
+    else
+        sithCogVm_SendMsgToPlayer(&sithCogVm_netMsgTmp, sendto_id, mpFlags, 0);
+}
+
+int sithDSS_HandleSyncSectorAlt(sithCogMsg *msg)
+{
+    NETMSG_IN_START(msg);
+
+    int idx = NETMSG_POPS16();
+
+    sithSector* pSector = sithSector_GetPtrFromIdx(idx);
+    if ( pSector )
+    {
+        int oldFlags = pSector->flags;
+        pSector->flags = NETMSG_POPU32();
+        if (pSector->flags & SITH_SECTOR_80)
+        {
+            if (!(oldFlags & SITH_SECTOR_80))
+            {
+                sithSector_UnsetAdjoins(pSector);
+                return 1;
+            }
+        }
+        else if (!(oldFlags & SITH_SECTOR_80))
+        {
+            return 1;
+        }
+
+        if (!(pSector->flags & SITH_SECTOR_80))
+            sithSector_SetAdjoins(pSector);
+
+        return 1;
+    }
+    return 0;
+}
 
 void sithDSS_SendSyncAI(sithActor *actor, int sendto_id, int idx)
 {    
@@ -721,8 +765,8 @@ void sithDSS_SendMisc(int sendto_id, int mpFlags)
     if ( sithSoundSys_bPlayingMci )
     {
         NETMSG_PUSHU8(sithSoundSys_dword_835FCC);
-        NETMSG_PUSHU8(sithSoundSys_trackTo);
         NETMSG_PUSHU8(sithSoundSys_trackFrom);
+        NETMSG_PUSHU8(sithSoundSys_trackTo);
     }
     
     NETMSG_END(COGMSG_ID_1F);
@@ -774,8 +818,8 @@ int sithDSS_HandleMisc(sithCogMsg *msg)
     if ( sithSoundSys_bPlayingMci )
     {
         sithSoundSys_dword_835FCC = NETMSG_POPU8();
-        sithSoundSys_trackTo = NETMSG_POPU8();
         sithSoundSys_trackFrom = NETMSG_POPU8();
+        sithSoundSys_trackTo = NETMSG_POPU8();
         sithSoundSys_ResumeMusic(1);
     }
 

@@ -57,15 +57,15 @@ void stdMci_Shutdown()
     stdMci_bInitted = 0;
 }
 
-int stdMci_Play(uint8_t trackTo, uint8_t trackFrom)
+int stdMci_Play(uint8_t trackFrom, uint8_t trackTo)
 {
     MCI_PLAY_PARMS playParams;
 
     if (!stdMci_bInitted)
         return 0;
 
-    playParams.dwTo = (trackFrom + 1 <= trackTo) ? (trackTo + 1) : (trackFrom + 1);
-    playParams.dwFrom = trackTo;
+    playParams.dwTo = (trackTo + 1 <= trackFrom) ? (trackFrom + 1) : (trackTo + 1);
+    playParams.dwFrom = trackFrom;
     if (!jk_mciSendCommandA(stdMci_mciId, MCI_PLAY, (MCI_TO|MCI_FROM), &playParams))
         return 1;
     if(!jk_mciSendCommandA(stdMci_mciId, MCI_PLAY, MCI_FROM, &playParams))
@@ -123,8 +123,8 @@ double stdMci_GetTrackLength(int track)
 #else // LINUX
 #ifdef NULL_SOUND
 
-int stdMci_trackTo;
 int stdMci_trackFrom;
+int stdMci_trackTo;
 int stdMci_trackCurrent;
 int stdMci_music;
 
@@ -145,22 +145,25 @@ void stdMci_Shutdown()
 void stdMci_trackFinished();
 void stdMci_trackStart(int track)
 {
+    stdMci_trackCurrent = track;
     stdMci_music = 1;
 }
 
 void stdMci_trackFinished()
 {
     stdMci_trackCurrent++;
-    if (stdMci_trackCurrent >= stdMci_trackTo)
-        stdMci_trackCurrent = stdMci_trackFrom;
-    
-    stdMci_trackStart(stdMci_trackCurrent);
+    if (stdMci_trackCurrent > stdMci_trackTo)
+        stdMci_Stop();
+    else
+        stdMci_trackStart(stdMci_trackCurrent);
 }
 
-int stdMci_Play(uint8_t trackTo, uint8_t trackFrom)
+int stdMci_Play(uint8_t trackFrom, uint8_t trackTo)
 {
-    stdMci_trackTo = trackTo;
     stdMci_trackFrom = trackFrom;
+    stdMci_trackTo = trackTo;
+
+    return 1;
 }
 
 void stdMci_SetVolume(float vol)
@@ -190,9 +193,10 @@ double stdMci_GetTrackLength(int track)
 
 #include <SDL_mixer.h>
 
-int stdMci_trackTo;
 int stdMci_trackFrom;
+int stdMci_trackTo;
 int stdMci_trackCurrent;
+
 Mix_Music* stdMci_music;
 
 int stdMci_Startup()
@@ -246,6 +250,7 @@ void stdMci_trackStart(int track)
     stdMci_music = Mix_LoadMUS(tmp); 
     if (!stdMci_music) {
         printf("INFO: Failed to play music `%s', trying alternate location...\n", tmp);
+        printf("Mix_LoadMUS: %s\n", Mix_GetError());
     }
 
     if (stdMci_music)
@@ -266,6 +271,7 @@ void stdMci_trackStart(int track)
     stdMci_music = Mix_LoadMUS(tmp); 
     if (!stdMci_music) {
         printf("WARN: Failed to play music `%s'\n", tmp);
+        printf("Mix_LoadMUS: %s\n", Mix_GetError());
         //return;
     }
 
@@ -299,14 +305,18 @@ void stdMci_trackStart(int track)
         stdMci_music = Mix_LoadMUS(tmp); 
         if (!stdMci_music) {
             printf("WARN: Failed to play music `%s' too. Must not have any music.\n", tmp);
+            printf("Mix_LoadMUS: %s\n", Mix_GetError());
         }
     }
 
     if (!stdMci_music) return;
 
 done:
+    stdMci_trackCurrent = track;
     Mix_HaltMusic();
-    Mix_PlayMusic(stdMci_music, 0);
+    if (Mix_PlayMusic(stdMci_music, 0) < 0) {
+        printf("Mix_PlayMusic: %s\n", Mix_GetError());
+    }
     Mix_HookMusicFinished(stdMci_trackFinished);
     printf("INFO: Playing music `%s'\n", tmp);
 }
@@ -314,22 +324,24 @@ done:
 void stdMci_trackFinished()
 {
     stdMci_trackCurrent++;
-    if (stdMci_trackCurrent >= stdMci_trackTo)
-        stdMci_trackCurrent = stdMci_trackFrom;
-    
-    stdMci_trackStart(stdMci_trackCurrent);
+    if (stdMci_trackCurrent > stdMci_trackTo)
+        stdMci_Stop();
+    else
+        stdMci_trackStart(stdMci_trackCurrent);
 }
 
-int stdMci_Play(uint8_t trackTo, uint8_t trackFrom)
+int stdMci_Play(uint8_t trackFrom, uint8_t trackTo)
 {
     char tmp[256];
     
-    printf("stdMci: play track %d to %d\n", trackTo, trackFrom);
+    printf("stdMci: play track %d to %d\n", trackFrom, trackTo);
     
-    stdMci_trackTo = trackTo;
     stdMci_trackFrom = trackFrom;
+    stdMci_trackTo = trackTo;
     
-    stdMci_trackStart(stdMci_trackTo);
+    stdMci_trackStart(trackFrom);
+
+    return 1;
 }
 
 void stdMci_SetVolume(float vol)

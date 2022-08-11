@@ -44,13 +44,13 @@ rdParticle* sithParticle_LoadEntry(const char *a1)
     v1 = sithWorld_pLoading;
     if ( !sithWorld_pLoading->particles )
     {
-        v2 = (rdParticle *)pSithHS->alloc(5120);
+        v2 = (rdParticle *)pSithHS->alloc(64 * sizeof(rdParticle));
         v1->particles = v2;
         if ( v2 )
         {
             v1->numParticles = 64;
             v1->numParticlesLoaded = 0;
-            _memset(v2, 0, 0x1400u);
+            _memset(v2, 0, 64 * sizeof(rdParticle));
         }
     }
     result = (rdParticle *)stdHashTable_GetKeyVal(sithParticle_alloc, a1);
@@ -60,7 +60,7 @@ rdParticle* sithParticle_LoadEntry(const char *a1)
         if ( v4 < v1->numParticles )
         {
             v5 = &v1->particles[v4];
-            _sprintf(v6, "%s%c%s", "misc\\par", 92, a1);
+            _sprintf(v6, "%s%c%s", "misc\\par", '\\', a1);
             if ( rdParticle_LoadEntry(v6, v5) )
             {
                 stdHashTable_SetKeyVal(sithParticle_alloc, v5->name, v5);
