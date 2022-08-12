@@ -22,6 +22,9 @@ lipo -create -output OpenJKDF2_universal.app/Contents/MacOS/libogg.0.dylib OpenJ
 install_name_tool -change /usr/local/opt/libogg/lib/libogg.0.dylib @executable_path/libogg.0.dylib OpenJKDF2_universal.app/Contents/MacOS/libFLAC.8.dylib
 install_name_tool -change /opt/homebrew/opt/libogg/lib/libogg.0.dylib @executable_path/libogg.0.dylib OpenJKDF2_universal.app/Contents/MacOS/libFLAC.8.dylib
 
+install_name_tool -change /usr/local/lib/libSDL2.dylib @executable_path/libSDL2-2.0.0.dylib OpenJKDF2_universal.app/Contents/MacOS/openjkdf2-64
+install_name_tool -change /opt/homebrew/lib/libSDL2.dylib @executable_path/libSDL2-2.0.0.dylib OpenJKDF2_universal.app/Contents/MacOS/openjkdf2-64
+
 chmod 774 OpenJKDF2_universal.app/Contents/MacOS/openjkdf2-64
 chmod 774 OpenJKDF2_universal.app/Contents/MacOS/*.dylib
 
